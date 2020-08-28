@@ -8,7 +8,6 @@ import MacSdk.Framework.CoreFoundation
 import Foreign hiding (with)
 import Foreign.C.Types (CInt(..))
 
-import Control.Monad.IO.Class (MonadIO(..))
 import Control.Monad.Managed
 
 foreign import ccall unsafe "Carbon/Carbon.h AXUIElementPerformAction"

@@ -8,6 +8,8 @@ module MacSdk.Framework.CoreGraphics
   , module MacSdk.Framework.CoreGraphics.Space
   , module MacSdk.Framework.CoreGraphics.Mouse
   , module MacSdk.Framework.CoreGraphics.Window
+  , module MacSdk.Framework.CoreGraphics.Context
+  , module MacSdk.Framework.CoreGraphics.Glyph
   ) where
 
 import MacSdk.Framework.CoreGraphics.Connection
@@ -19,3 +21,5 @@ import MacSdk.Framework.CoreGraphics.Rect
 import MacSdk.Framework.CoreGraphics.Space
 import MacSdk.Framework.CoreGraphics.Mouse
 import MacSdk.Framework.CoreGraphics.Window
+import MacSdk.Framework.CoreGraphics.Context
+import MacSdk.Framework.CoreGraphics.Glyph

@@ -43,3 +43,11 @@ EventHandlerUPP handler_upp(carbon_event_callback_t *callb) {
 CGEventMask event_type_to_mask_bit(CGEventType ety) {
   return CGEventMaskBit(ety);
 }
+
+void CTRunGetGlyphs_(CTRunRef run, CFRange *range, CGGlyph *buffer) {
+  return CTRunGetGlyphs(run, *range, buffer);
+}
+
+void CTRunGetPositions_(CTRunRef run, CFRange *range, CGPoint *buffer) {
+  return CTRunGetPositions(run, *range, buffer);
+}

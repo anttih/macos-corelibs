@@ -11,7 +11,6 @@ import Foreign hiding (with)
 import Foreign.C.Types (CBool(..))
 import MacSdk.Framework.CoreFoundation
 import MacSdk.Framework.Accessibility.Value
-import Control.Monad.IO.Class (MonadIO(..))
 import Control.Monad.Managed
 
 type Lens' s a = forall f . Functor f => (a -> f a) -> s -> f s

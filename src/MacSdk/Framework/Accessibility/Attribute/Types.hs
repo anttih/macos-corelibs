@@ -14,9 +14,10 @@ import Foreign (castPtr)
 import Control.Monad.Trans.Maybe
 import Control.Monad (msum, join, (<=<))
 import Data.Maybe (fromMaybe)
+import Data.Kind (Type)
 import Data.Bifunctor (bimap)
 
-data Attribute :: * -> * where
+data Attribute :: Type -> Type where
   -- | The role, or type, of this accessibility object (for example, AXButton).
   -- This string is for identification purposes only and does not need to be
   -- localized. All accessibility objects must include this attribute.

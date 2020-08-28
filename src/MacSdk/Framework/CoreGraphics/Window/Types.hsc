@@ -8,6 +8,7 @@ module MacSdk.Framework.CoreGraphics.Window.Types where
 
 import Data.Word
 import Data.Bits
+import Data.Kind (Type)
 import MacSdk.Framework.Types (PID)
 import MacSdk.Framework.CoreFoundation
 import MacSdk.Framework.CoreGraphics.Rect
@@ -70,7 +71,7 @@ foreign import ccall unsafe kCGWindowName_ :: IO CFStringRef
 foreign import ccall unsafe kCGWindowIsOnscreen_ :: IO CFStringRef
 foreign import ccall unsafe kCGWindowBackingLocationVideoMemory_ :: IO CFStringRef
 
-data WindowListKey :: * -> * where
+data WindowListKey :: Type -> Type where
   -- | ID of the window. The ID is unique within the current user session.
   WindowNumber :: WindowListKey WindowID
   WindowStoreType :: WindowListKey Number
@@ -89,7 +90,7 @@ data WindowListKey :: * -> * where
 
 deriving instance Show (WindowListKey ty)
 
-data OptionalWindowListKey :: * -> * where
+data OptionalWindowListKey :: Type -> Type where
   WindowOwnerName :: OptionalWindowListKey CFString
   WindowName :: OptionalWindowListKey CFString
   WindowIsOnscreen :: OptionalWindowListKey Bool

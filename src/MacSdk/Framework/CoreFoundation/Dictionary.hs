@@ -12,11 +12,9 @@ module MacSdk.Framework.CoreFoundation.Dictionary
   -- , strKey
   ) where
 
-import Control.Monad.IO.Class (MonadIO(..))
 import Control.Monad.Managed
 import Foreign.Ptr
 import Foreign.C.Types (CInt(..), CBool(..))
-import Foreign.Marshal.Utils (withMany)
 import Foreign.Marshal.Array
 import Foreign hiding (with)
 import MacSdk.Framework.CoreFoundation.Object

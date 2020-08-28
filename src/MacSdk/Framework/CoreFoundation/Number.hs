@@ -12,11 +12,11 @@ module MacSdk.Framework.CoreFoundation.Number
   ) where
 
 import Control.Monad.Managed
-import Control.Monad.IO.Class (MonadIO(..))
 import Foreign hiding (with)
 import Foreign.C.Types (CInt(..), CBool(..))
 import MacSdk.Framework.CoreFoundation.Allocator
 import MacSdk.Framework.CoreFoundation.Object
+import Data.Kind (Type)
 
 data CFNumber
 type CFNumberRef = Ptr CFNumber
@@ -25,7 +25,7 @@ type Number = Object CFNumber
 
 type CFNumberType = CInt
 
-data NumberType :: * -> * where
+data NumberType :: Type -> Type where
   NumberSigned64Type :: NumberType Int64
   NumberLongType :: NumberType Int64
   NumberIntType :: NumberType Int32

@@ -10,8 +10,9 @@ module MacSdk.Framework.CoreGraphics.Event.Field where
 #include <Carbon/Carbon.h>
 
 import Data.Word
+import Data.Kind (Type)
 
-data EventField :: * -> * where
+data EventField :: Type -> Type where
   -- | Key to access an integer field that contains the mouse button event number.
   -- Matching mouse-down and mouse-up events will have the same event number.
   MouseEventNumber :: EventField Word64

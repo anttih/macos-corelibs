@@ -28,6 +28,7 @@ library
       MacSdk.Framework.Accessibility.Value
       MacSdk.Framework.CoreFoundation
       MacSdk.Framework.CoreFoundation.Allocator
+      MacSdk.Framework.CoreFoundation.AttributedString
       MacSdk.Framework.CoreFoundation.Array
       MacSdk.Framework.CoreFoundation.Boolean
       MacSdk.Framework.CoreFoundation.Dictionary
@@ -52,6 +53,9 @@ library
       MacSdk.Framework.CoreGraphics.Space
       MacSdk.Framework.CoreGraphics.Window
       MacSdk.Framework.CoreGraphics.Window.Types
+      MacSdk.Framework.CoreGraphics.Context
+      MacSdk.Framework.CoreGraphics.Glyph
+      MacSdk.Framework.CoreText
       MacSdk.Framework.Types
   other-modules:
       MacSdk.Prism
