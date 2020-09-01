@@ -1,15 +1,16 @@
 module MacSdk.Framework.CoreText where
 
-import Foreign.Ptr (Ptr)
-import Foreign.C.Types (CInt(..), CSize(..), CShort(..), CBool(..))
+import Foreign.Ptr (Ptr, castPtr)
+import Foreign.C.Types (CInt(..), CSize(..), CBool(..), CDouble(..))
 import System.IO.Unsafe (unsafePerformIO)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Managed (managed, with)
 import MacSdk.Framework.CoreGraphics
-import MacSdk.Framework.CoreFoundation.AttributedString (CFAttributedString, CFAttributedStringRef, Range)
-import MacSdk.Framework.CoreFoundation.Array (CFArrayRef, CFIndex)
-import MacSdk.Framework.CoreFoundation.Object (Object, CFClass, withCFPtr, manageCFObj)
-import MacSdk.Framework.CoreFoundation.String (CFStringRef)
+import MacSdk.Framework.CoreFoundation.Range (Range)
+import MacSdk.Framework.CoreFoundation.AttributedString (CFAttributedString, CFAttributedStringRef)
+import MacSdk.Framework.CoreFoundation.Array (CFArrayRef, CFIndex, getCFArrayValues)
+import MacSdk.Framework.CoreFoundation.Object (Object, CFClass, withCFPtr, manageCFObj, retainManageCFObj)
+import MacSdk.Framework.CoreFoundation.String (CFStringRef, UniChar, CFStringEncoding(..), fromString)
 
 #include <CoreText/CoreText.h>
 
@@ -26,20 +27,39 @@ lineCreateWithAttributedString attrStr = liftIO $ flip with pure $ do
   attrStrRef <- managed (withCFPtr attrStr)
   liftIO (ctLineCreateWithAttributedString attrStrRef >>= manageCFObj)
 
-foreign import ccall "CTLineGetGlyphRuns" ctLineGetGlyphRuns :: CTLineRef -> IO CFArrayRef
-
 data CTRun_
 instance CFClass CTRun_
 type CTRunRef = Ptr CTRun_
 type CTRun = Object CTRun_
+
+foreign import ccall "CTLineGetGlyphRuns" ctLineGetGlyphRuns :: CTLineRef -> IO CFArrayRef
+
+lineGetGlyphRuns :: CTLine -> IO [CTRun]
+lineGetGlyphRuns line = liftIO $ flip with pure $ do
+  lineRef <- managed (withCFPtr line)
+  liftIO $
+    ctLineGetGlyphRuns lineRef
+      >>= getCFArrayValues
+      >>= mapM retainManageCFObj . fmap castPtr
 
 data CTFont_
 instance CFClass CTFont_
 type CTFontRef = Ptr CTFont_
 type CTFont = Object CTFont_
 
+type CGFloat = CDouble
+
+foreign import ccall "CTFontCreateWithName"
+  ctFontCreateWithName :: CFStringRef -> CGFloat -> IO CTFontRef
+
+fontCreateWithName :: String -> Double -> IO CTFont
+fontCreateWithName name size = liftIO $ flip with pure $ do
+  name' <- liftIO (fromString CFStringEncodingASCII name)
+  fontRef <- managed (withCFPtr name')
+  liftIO (ctFontCreateWithName fontRef (CDouble size) >>= manageCFObj)
+
 foreign import ccall "CTFontGetGlyphsForCharacters" ctFontGetGlyphsForCharacters
-  :: CTFontRef -> Ptr CShort -> Ptr CGGlyph -> CFIndex -> IO CBool
+  :: CTFontRef -> Ptr UniChar -> Ptr CGGlyph -> CFIndex -> IO CBool
 
 foreign import ccall "CTRunGetGlyphCount" ctRunGetGlyphCount :: CTRunRef -> IO CInt
 

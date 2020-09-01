@@ -1,3 +1,5 @@
 module MacSdk.Framework.CoreGraphics.Glyph where
 
-data CGGlyph
+import Foreign.C.Types (CUShort)
+
+type CGGlyph = CUShort

@@ -4,10 +4,13 @@ module MacSdk.Framework.CoreFoundation.String
   ( CFStringEncoding(..)
   , CFStringRef
   , CFString
+  , UniChar
   -- * Conversion
   , toCString
   , fromCString
   , fromCStringWithAllocator
+  , cfStringGetCharacters
+  , cfStringCreateWithCharacters
   , toString
   , fromString
   ) where
@@ -15,9 +18,10 @@ module MacSdk.Framework.CoreFoundation.String
 import MacSdk.Framework.CoreFoundation.Allocator
 import MacSdk.Framework.CoreFoundation.Object
 import MacSdk.Framework.CoreFoundation.Array
+import MacSdk.Framework.CoreFoundation.Range (Range)
 import Foreign
 import Foreign.C.String
-import Foreign.C.Types (CBool(..), CInt(..))
+import Foreign.C.Types (CBool(..), CInt(..), CUShort(..))
 import Control.Monad
 import Control.Monad.IO.Class (MonadIO(..))
 
@@ -91,6 +95,8 @@ type CFStringRef = Ptr CFString_
 instance CFClass CFString_
 type CFString = Object CFString_
 
+type UniChar = CUShort
+
 foreign import ccall unsafe "CFStringGetCString"
   cfStringGetCString
   :: CFStringRef -> CString -> CFIndex -> ForeignCFStringEncoding -> IO CBool
@@ -104,6 +110,12 @@ foreign import ccall "CFStringGetLength"
 foreign import ccall "CFStringGetMaximumSizeForEncoding"
   cfStringGetMaximumSizeForEncoding
   :: CFIndex -> ForeignCFStringEncoding -> IO CFIndex
+
+foreign import ccall "CFStringGetCharacters_"
+  cfStringGetCharacters :: CFStringRef -> Ptr Range -> Ptr UniChar -> IO ()
+
+foreign import ccall "CFStringCreateWithCharacters"
+  cfStringCreateWithCharacters :: CFAllocatorRef -> Ptr UniChar -> CFIndex -> IO ()
 
 -- | Creates a CFString reference from a C-style string, using a provided
 -- allocator and string encoding.

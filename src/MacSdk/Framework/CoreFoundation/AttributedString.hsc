@@ -1,12 +1,10 @@
 module MacSdk.Framework.CoreFoundation.AttributedString where
 
 import Control.Monad.Managed
-import Foreign.Storable (Storable, peek, poke, alignment, sizeOf, peekByteOff, pokeByteOff)
 import Foreign.Ptr (Ptr)
 import MacSdk.Framework.CoreFoundation.Allocator (Allocator, CFAllocatorRef)
 import MacSdk.Framework.CoreFoundation.String (CFStringRef, CFStringEncoding(..))
 import qualified MacSdk.Framework.CoreFoundation.String as String
-import MacSdk.Framework.CoreFoundation.Array (CFIndex)
 import MacSdk.Framework.CoreFoundation.Dictionary (CFDictionaryRef, Dictionary)
 import MacSdk.Framework.CoreFoundation.Object (withCFPtr, manageCFObj, Object, CFClass)
 
@@ -30,15 +28,3 @@ fromString alloc s dict = liftIO $ flip with pure $ do
   liftIO $ do
     cfAttributedStringCreate alloc' cfString' d' >>= manageCFObj
 
-data Range = Range { cfRangeLength :: CFIndex, cfRangeLocation :: CFIndex }
-
-instance Storable Range where
-  sizeOf _ = #{size CFRange}
-  alignment _ = #{alignment CFRange}
-  peek ptr = do
-    length' <- #{peek CFRange, length} ptr
-    location' <- #{peek CFRange, location} ptr
-    pure (Range length' location')
-  poke ptr (Range length' location') = do
-    #{poke CFRange, length} ptr length'
-    #{poke CFRange, location} ptr location'

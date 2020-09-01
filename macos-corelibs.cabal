@@ -35,6 +35,7 @@ library
       MacSdk.Framework.CoreFoundation.Number
       MacSdk.Framework.CoreFoundation.Object
       MacSdk.Framework.CoreFoundation.RunLoop
+      MacSdk.Framework.CoreFoundation.Range
       MacSdk.Framework.CoreFoundation.String
       MacSdk.Framework.CoreFoundation.UUID
       MacSdk.Framework.CoreGraphics

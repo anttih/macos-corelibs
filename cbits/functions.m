@@ -1,4 +1,5 @@
 #include <Carbon/Carbon.h>
+#include <AppKit/AppKit.h>
 
 CGError CGWarpMouseCursorPosition_(CGPoint *pos) {
   return CGWarpMouseCursorPosition(*pos);
@@ -50,4 +51,13 @@ void CTRunGetGlyphs_(CTRunRef run, CFRange *range, CGGlyph *buffer) {
 
 void CTRunGetPositions_(CTRunRef run, CFRange *range, CGPoint *buffer) {
   return CTRunGetPositions(run, *range, buffer);
+}
+
+// CFStringRef -> Ptr Range -> Ptr UniChar -> IO ()
+void CFStringGetCharacters_(CFStringRef s, CFRange *range, UniChar *buffer) {
+  return CFStringGetCharacters(s, *range, buffer);
+}
+
+CGContextRef c_get_current_context() {
+  return NSGraphicsContext.currentContext.CGContext;
 }
