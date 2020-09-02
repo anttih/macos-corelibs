@@ -5,12 +5,15 @@ import Foreign.C.Types (CInt(..), CSize(..), CBool(..), CDouble(..))
 import System.IO.Unsafe (unsafePerformIO)
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Managed (managed, with)
+import Foreign.Marshal.Array (allocaArray, peekArray)
 import MacSdk.Framework.CoreGraphics
 import MacSdk.Framework.CoreFoundation.Range (Range)
 import MacSdk.Framework.CoreFoundation.AttributedString (CFAttributedString, CFAttributedStringRef)
 import MacSdk.Framework.CoreFoundation.Array (CFArrayRef, CFIndex, getCFArrayValues)
 import MacSdk.Framework.CoreFoundation.Object (Object, CFClass, withCFPtr, manageCFObj, retainManageCFObj)
 import MacSdk.Framework.CoreFoundation.String (CFStringRef, UniChar, CFStringEncoding(..), fromString)
+import qualified MacSdk.Framework.CoreText.FontOrientation as Orientation
+import MacSdk.Framework.CoreText.FontOrientation (CTFontOrientation, ForeignCTFontOrientation)
 
 #include <CoreText/CoreText.h>
 
@@ -69,6 +72,31 @@ foreign import ccall "CTRunGetPositions_" ctRunGetPositions :: CTRunRef -> Ptr R
 
 foreign import ccall "CTFontDrawGlyphs" ctFontDrawGlyphs
   :: CTFontRef -> Ptr CGGlyph -> Ptr Point -> CSize -> CGContextRef -> IO ()
+
+foreign import ccall "CTFontGetAdvancesForGlyphs"
+  ctFontGetAdvancesForGlyphs :: CTFontRef -> ForeignCTFontOrientation -> Ptr CGGlyph -> Ptr Size -> CFIndex -> IO CDouble
+
+getAdvancesForGlyphs :: CTFont -> CTFontOrientation -> Ptr CGGlyph -> CFIndex -> IO [Size]
+getAdvancesForGlyphs font orientation glyphsBuffer count = do
+  withCFPtr font $ \fontRef ->
+    allocaArray (fromIntegral count) $ \advancesBuffer -> do
+      _ <- ctFontGetAdvancesForGlyphs fontRef (Orientation.toForeignEncoding orientation) glyphsBuffer advancesBuffer count
+      peekArray (fromIntegral count) advancesBuffer
+
+foreign import ccall "CTFontGetAscent" ctFontGetAscent :: CTFontRef -> IO CGFloat
+
+fontGetAscent :: CTFont -> CGFloat
+fontGetAscent font = unsafePerformIO (withCFPtr font ctFontGetAscent)
+
+foreign import ccall "CTFontGetDescent" ctFontGetDescent :: CTFontRef -> IO CGFloat
+
+fontGetDescent :: CTFont -> CGFloat
+fontGetDescent font = unsafePerformIO (withCFPtr font ctFontGetDescent)
+
+foreign import ccall "CTFontGetLeading" ctFontGetLeading :: CTFontRef -> IO CGFloat
+
+fontGetLeading :: CTFont -> CGFloat
+fontGetLeading font = unsafePerformIO (withCFPtr font ctFontGetLeading)
 
 data FontAttribute
   = CTFontAttributeName

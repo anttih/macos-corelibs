@@ -57,6 +57,7 @@ library
       MacSdk.Framework.CoreGraphics.Context
       MacSdk.Framework.CoreGraphics.Glyph
       MacSdk.Framework.CoreText
+      MacSdk.Framework.CoreText.FontOrientation
       MacSdk.Framework.Types
   other-modules:
       MacSdk.Prism
