@@ -53,11 +53,14 @@ void CTRunGetPositions_(CTRunRef run, CFRange *range, CGPoint *buffer) {
   return CTRunGetPositions(run, *range, buffer);
 }
 
-// CFStringRef -> Ptr Range -> Ptr UniChar -> IO ()
 void CFStringGetCharacters_(CFStringRef s, CFRange *range, UniChar *buffer) {
   return CFStringGetCharacters(s, *range, buffer);
 }
 
 CGContextRef c_get_current_context() {
   return NSGraphicsContext.currentContext.CGContext;
+}
+
+void CGContextFillRect_(CGContextRef contextRef, CGRect *rect) {
+  return CGContextFillRect(contextRef, *rect);
 }

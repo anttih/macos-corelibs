@@ -50,8 +50,6 @@ instance CFClass CTFont_
 type CTFontRef = Ptr CTFont_
 type CTFont = Object CTFont_
 
-type CGFloat = CDouble
-
 foreign import ccall "CTFontCreateWithName"
   ctFontCreateWithName :: CFStringRef -> CGFloat -> IO CTFontRef
 
